@@ -105,13 +105,16 @@ const Login = () => {
   const [loginVisible, setVisibility] = useState(false);
   return (
     <React.Fragment key={"right"}>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={(e) => setVisibility(true)}
-      >
-        Login
-      </Button>
+      <Box textAlign="right" margin="-41px 7px 0px 0px">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={(e) => setVisibility(true)}
+        >
+          Login
+        </Button>
+      </Box>
       <Drawer
         anchor="right"
         open={loginVisible}
