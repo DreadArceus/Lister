@@ -5,7 +5,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
-import Slide from "@material-ui/core/Slide";
+import { motion } from "framer-motion";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
@@ -64,13 +64,13 @@ const CustomForm = (props) => {
       variant="outlined"
       style={{ margin: "5px" }}
     ></TextField>,
-    <Button
-      key={3}
-      variant="contained"
-      color="secondary"
-      type="submit"
-      style={{ marginTop: `${-1 * (240 - 122.5 * props.index)}px` }}
-    >
+    <Button key={3} variant="contained" color="secondary" type="submit">
+      View List
+    </Button>,
+    <Button key={4} variant="contained" color="secondary" type="submit">
+      Modify List
+    </Button>,
+    <Button key={5} variant="contained" color="secondary" type="submit">
       Create List
     </Button>,
   ];
@@ -78,11 +78,21 @@ const CustomForm = (props) => {
     <form onSubmit={handleSubmit}>
       <Box textAlign="center" width="270px" paddingTop="50px">
         {formComponents.map((item, index) => {
-          return (
-            <Slide direction="up" in={index === 3 || index <= props.index}>
-              {item}
-            </Slide>
-          );
+          if (index <= props.index || index === props.index + 3) {
+            return (
+              <motion.div
+                key={index}
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: index > 2 ? 1 : 0.5 }}
+              >
+                {item}
+              </motion.div>
+            );
+          }
+          return <div />;
         })}
       </Box>
     </form>
