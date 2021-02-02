@@ -58,12 +58,12 @@ const CustomListItem = (props) => {
   const editFieldRef = useRef(null);
   const [editedText, setEditedText] = useState(props.text);
   useEffect(() => {
-    if (props.inEditing === props.index) {
+    if (props.inEditing === props.id) {
       editFieldRef.current.focus();
     }
-  }, [props.inEditing, props.index]);
+  }, [props.inEditing, props.id]);
   const getActive = () => {
-    if (props.inEditing === props.index) {
+    if (props.inEditing === props.id) {
       return (
         <TextField
           style={{ width: "1100px" }}
@@ -95,10 +95,10 @@ const CustomListItem = (props) => {
         <IconButton
           edge="end"
           className={classes.rightIcon}
-          disabled={props.inEditing !== props.index && props.inEditing !== -1}
+          disabled={props.inEditing !== props.id && props.inEditing !== -1}
           onClick={(e) =>
             props.setInEditing(
-              props.inEditing === props.index ? -1 : props.index
+              props.inEditing === props.id ? -1 : props.id
             )
           }
         >
@@ -107,7 +107,12 @@ const CustomListItem = (props) => {
         <IconButton
           edge="end"
           className={classes.rightIcon}
-          onClick={(e) => props.handleDelete(props.index)}
+          onClick={(e) => {
+            if(props.id === props.inEditing){
+              props.setInEditing(-1);
+            }
+            props.handleDelete(props.index)
+          }}
         >
           <DeleteOutlinedIcon />
         </IconButton>
@@ -162,6 +167,7 @@ const Editor = () => {
             return (
               <CustomListItem
                 key={item.key}
+                id={item.key}
                 index={index}
                 text={item.text}
                 inEditing={inEditing}
