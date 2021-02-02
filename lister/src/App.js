@@ -82,12 +82,7 @@ function App() {
         .catch((error) => {
           setListInfo(initInfo);
           setRealAuthor("");
-          setListData([
-            {
-              key: -99,
-              text: `ERROR COULD NOT SAVE LAST CHANGE CONTACT THE DEVELOPER, "${error.message}"`,
-            },
-          ]);
+          console.log(error.message);
         });
     }
   }, [listData, listInfo]);

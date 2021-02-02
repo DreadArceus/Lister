@@ -65,4 +65,4 @@ def save_list(request: HttpRequest, name: str, password: str):
             list_serializer.save()
             return JsonResponse({'msg': 'successful'}, status=status.HTTP_200_OK)
         return JsonResponse(list_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return JsonResponse({'msg': 'no modification detected'}, status=status.HTTP_304_NOT_MODIFIED)
+    return JsonResponse({'msg': 'no modification detected'}, status=status.HTTP_200_OK)

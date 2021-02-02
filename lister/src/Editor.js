@@ -138,10 +138,12 @@ const Editor = (props) => {
     ]);
   };
   const handleDelete = (index) => {
-    props.setListData([
-      ...props.listData.slice(0, index),
-      ...props.listData.slice(index + 1),
-    ]);
+    if (props.listData.length !== 1) {
+      props.setListData([
+        ...props.listData.slice(0, index),
+        ...props.listData.slice(index + 1),
+      ]);
+    }
   };
   const [insertText, setInsertText] = useState("");
   const handleSubmit = (e) => {
