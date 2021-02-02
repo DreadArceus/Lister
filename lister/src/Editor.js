@@ -86,7 +86,11 @@ const CustomListItem = (props) => {
   return (
     <ListItem className={classes.item}>
       <ListItemIcon>
-        <IconButton edge="start" className={classes.leftIcon}>
+        <IconButton
+          edge="start"
+          className={classes.leftIcon}
+          disabled={props.view}
+        >
           <ClearAllOutlinedIcon />
         </IconButton>
       </ListItemIcon>
@@ -95,11 +99,12 @@ const CustomListItem = (props) => {
         <IconButton
           edge="end"
           className={classes.rightIcon}
-          disabled={props.inEditing !== props.id && props.inEditing !== -1}
+          disabled={
+            props.view ||
+            (props.inEditing !== props.id && props.inEditing !== -1)
+          }
           onClick={(e) =>
-            props.setInEditing(
-              props.inEditing === props.id ? -1 : props.id
-            )
+            props.setInEditing(props.inEditing === props.id ? -1 : props.id)
           }
         >
           <EditOutlinedIcon />
@@ -108,11 +113,12 @@ const CustomListItem = (props) => {
           edge="end"
           className={classes.rightIcon}
           onClick={(e) => {
-            if(props.id === props.inEditing){
+            if (props.id === props.inEditing) {
               props.setInEditing(-1);
             }
-            props.handleDelete(props.index)
+            props.handleDelete(props.index);
           }}
+          disabled={props.view}
         >
           <DeleteOutlinedIcon />
         </IconButton>
@@ -121,34 +127,26 @@ const CustomListItem = (props) => {
   );
 };
 
-const Editor = () => {
+const Editor = (props) => {
   const classes = useStyles();
-  const [listData, setListData] = useState([
-    {
-      text: "Back End has not been made yet, lists are not saved",
-      key: 0,
-    },
-    { text: "This is a stock List", key: 1 },
-    {
-      text: 'Click "Login" and proceed from there to open another list',
-      key: 2,
-    },
-  ]);
   const [inEditing, setInEditing] = useState(-1);
   const handleEdit = (text, index) => {
-    setListData([
-      ...listData.slice(0, index),
-      { text: text, key: listData[index].key },
-      ...listData.slice(index + 1),
+    props.setListData([
+      ...props.listData.slice(0, index),
+      { text: text, key: props.listData[index].key },
+      ...props.listData.slice(index + 1),
     ]);
   };
   const handleDelete = (index) => {
-    setListData([...listData.slice(0, index), ...listData.slice(index + 1)]);
+    props.setListData([
+      ...props.listData.slice(0, index),
+      ...props.listData.slice(index + 1),
+    ]);
   };
   const [insertText, setInsertText] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    setListData((oldData) => {
+    props.setListData((oldData) => {
       return [
         ...oldData,
         {
@@ -163,7 +161,7 @@ const Editor = () => {
     <Box>
       <Box className={classes.listBox}>
         <List className={classes.text}>
-          {listData.map((item, index) => {
+          {props.listData.map((item, index) => {
             return (
               <CustomListItem
                 key={item.key}
@@ -174,6 +172,7 @@ const Editor = () => {
                 setInEditing={(newState) => setInEditing(newState)}
                 handleEdit={(text, index) => handleEdit(text, index)}
                 handleDelete={(index) => handleDelete(index)}
+                view={props.listInfo.password === ""}
               />
             );
           })}
@@ -189,6 +188,7 @@ const Editor = () => {
             label="Type text to insert"
             multiline
             className={classes.formField}
+            disabled={props.listInfo.password === ""}
           ></TextField>
           <Button
             variant="contained"
@@ -196,6 +196,7 @@ const Editor = () => {
             type="submit"
             size="large"
             className={classes.formButton}
+            disabled={props.listInfo.password === ""}
           >
             Insert
           </Button>

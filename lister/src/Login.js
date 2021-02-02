@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import "fontsource-roboto";
 import Drawer from "@material-ui/core/Drawer";
@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import { motion } from "framer-motion";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles({
   tab: {
@@ -21,16 +22,25 @@ const useStyles = makeStyles({
 });
 
 const CustomForm = (props) => {
+  const nameInputRef = useRef(null);
   const [formValues, setFormValues] = useState(["", "", ""]);
+  useEffect(() => {
+    nameInputRef.current.focus();
+  }, [props.index]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formValues);
+    props.setListInfo({
+      name: formValues[0],
+      password: formValues[1],
+      author: formValues[2],
+    });
     setFormValues(["", "", ""]);
     // setVisibility(false);
   };
   const formComponents = [
     <TextField
       key={0}
+      inputRef={nameInputRef}
       value={formValues[0]}
       onChange={(e) =>
         setFormValues([e.target.value, formValues[1], formValues[2]])
@@ -62,6 +72,7 @@ const CustomForm = (props) => {
       type="text"
       label="Author Name"
       variant="outlined"
+      required
       style={{ margin: "5px" }}
     ></TextField>,
     <Button key={3} variant="contained" color="secondary" type="submit">
@@ -92,14 +103,17 @@ const CustomForm = (props) => {
               </motion.div>
             );
           }
-          return <div />;
+          return <div key={-1 * index} />;
         })}
+        <Typography color="textPrimary" style={{ marginTop: "5px" }}>
+          {props.error}
+        </Typography>
       </Box>
     </form>
   );
 };
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const [tabIndex, setIndex] = useState(0);
   const [loginVisible, setVisibility] = useState(false);
@@ -133,7 +147,11 @@ const Login = () => {
           <Tab label="Modify" className={classes.tab} />
           <Tab label="Create" className={classes.tab} />
         </Tabs>
-        <CustomForm index={tabIndex} />
+        <CustomForm
+          index={tabIndex}
+          setListInfo={(info) => props.setListInfo(info)}
+          error={props.error}
+        />
       </Drawer>
     </React.Fragment>
   );
