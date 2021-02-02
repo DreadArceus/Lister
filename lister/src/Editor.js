@@ -127,6 +127,10 @@ const CustomListItem = (props) => {
   );
 };
 
+const generateKey = () => {
+  return Math.floor(Math.random() * 100000 + 1);
+};
+
 const Editor = (props) => {
   const classes = useStyles();
   const [inEditing, setInEditing] = useState(-1);
@@ -153,7 +157,7 @@ const Editor = (props) => {
         ...oldData,
         {
           text: insertText,
-          key: oldData.length === 0 ? 0 : oldData[oldData.length - 1].key + 1,
+          key: generateKey(),
         },
       ];
     });

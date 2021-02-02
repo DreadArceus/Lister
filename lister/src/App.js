@@ -62,6 +62,7 @@ function App() {
           )
           .then((response) => {
             setListData(response.data.list_items);
+            setRealAuthor(response.data.author);
             setError("");
           })
           .catch((error) => {
@@ -93,7 +94,7 @@ function App() {
           {listInfo.name || "List name here"}
         </Typography>
         <Typography variant="h6" color="secondary">
-          {realAuthor || listInfo.author || "Author name here"}
+          {realAuthor || "Author name here"}
         </Typography>
         <Login setListInfo={(info) => setListInfo(info)} error={error} />
         <Editor
